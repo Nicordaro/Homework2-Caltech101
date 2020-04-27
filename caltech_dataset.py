@@ -42,9 +42,7 @@ class Caltech(VisionDataset):
         self.y = []
         for(i,c) in enumerate(self.categories):
             self.index.append(i)
-            self.y.append(c)
-
-
+            self.y.append("Caltech101/101_ObjectCategories/"+c)
         '''
         - Here you should implement the logic for reading the splits files and accessing elements
         - If the RAM size allows it, it is faster to store all data in memory

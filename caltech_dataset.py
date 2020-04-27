@@ -38,11 +38,18 @@ class Caltech(VisionDataset):
 
         self.categories = sorted(os.listdir(root))
         self.categories.remove('BACKGROUND_Google')
+        #self.index = []
+        #self.y = []
+        #for(i,c) in enumerate(self.categories):
+        #    self.index.append(i)
+        #    self.y.append(c)
         self.index = []
         self.y = []
-        for(i,c) in enumerate(self.categories):
-            self.index.append(i)
-            self.y.append(c)
+        for (i, c) in enumerate(self.categories):
+            n = len(os.listdir(os.path.join(self.root, "101_ObjectCategories", c)))
+            self.index.extend(range(1, n + 1))
+            self.y.extend(n * [i])
+        
         '''
         - Here you should implement the logic for reading the splits files and accessing elements
         - If the RAM size allows it, it is faster to store all data in memory

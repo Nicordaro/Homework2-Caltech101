@@ -40,7 +40,7 @@ class Caltech(VisionDataset):
         if split =='train':
             self.train_idx=[]
             ##read all idxs for the train
-            with open(root + "/train.txt") as idx:
+            with open("Caltech101/train.txt") as idx:
                 data = idx.read().splitlines()
                 for el in data:
                     if el.split("/")[0]!='BACKGROUND_Google':
@@ -48,8 +48,8 @@ class Caltech(VisionDataset):
 
         if split =='test':
             self.test_idx=[]
-            ##read all idxs for the train
-            with open(root + "/test.txt") as idx:
+            ##read all idxs for the test
+            with open("Caltech101/test.txt") as idx:
                 data = idx.read().splitlines()
                 for el in data:
                     if el.split("/")[0]!='BACKGROUND_Google':

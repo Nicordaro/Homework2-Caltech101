@@ -34,7 +34,7 @@ class Caltech(VisionDataset):
                     self.categories.append(folder)
                     self.db.append("Caltech101/101_ObjectCategories/" + folder + "/" + img)
         self.categories = numpy.unique(sorted(self.categories)).tolist()
-        print(self.categories)
+        #print(self.categories)
         '''
         - Here you should implement the logic for reading the splits files and accessing elements
         - If the RAM size allows it, it is faster to store all data in memory

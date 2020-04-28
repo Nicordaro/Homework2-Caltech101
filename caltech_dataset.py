@@ -44,7 +44,7 @@ class Caltech(VisionDataset):
                 data = idx.read().splitlines()
                 for el in data:
                     if el.split("/")[0]!='BACKGROUND_Google':
-                        self.train_idx.append(self.db.index(root+"/101_ObjectCategories/"+el))
+                        self.train_idx.append(self.db.index(root+"/"+el))
 
         if split =='test':
             self.test_idx=[]
@@ -53,7 +53,7 @@ class Caltech(VisionDataset):
                 data = idx.read().splitlines()
                 for el in data:
                     if el.split("/")[0]!='BACKGROUND_Google':
-                        self.test_idx.append(self.db.index(root+"/101_ObjectCategories/"+el))
+                        self.test_idx.append(self.db.index(root+"/"+el))
 
         #print(self.categories)
         '''

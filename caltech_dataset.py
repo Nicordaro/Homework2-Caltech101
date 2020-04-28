@@ -26,12 +26,15 @@ class Caltech(VisionDataset):
         # (split files are called 'train.txt' and 'test.txt'
 
         self.db = []
+        self.categories = []
 
-        for folder in os.listdir(path=root):
-            for img in os.listdir(root + "/" + folder):
+        for folder in os.listdir("Caltech101/101_ObjectCategories"):
+            for img in os.listdir("Caltech101/101_ObjectCategories/" + folder):
                 if folder != 'BACKGROUND_Google':
-                    self.db.append(folder + "/" + img)
-
+                    self.categories.append(folder)
+                    self.db.append("Caltech101/101_ObjectCategories/" + folder + "/" + img)
+        self.categories = numpy.unique(sorted(self.categories)).tolist()
+        print(self.categories)
         '''
         - Here you should implement the logic for reading the splits files and accessing elements
         - If the RAM size allows it, it is faster to store all data in memory
@@ -56,8 +59,9 @@ class Caltech(VisionDataset):
 
         def getlabel(idx):
             item = self.db[idx]
-            item = item.split('/')[0]
-            return item
+            item = item.split('/')[2]
+            label = self.categories.index(item)
+            return label
 
 
         image, label = pil_loader(self.db[index]), getlabel(index)  # Provide a way to access image and label via index
@@ -77,10 +81,3 @@ class Caltech(VisionDataset):
         '''
         length = len(self.db)
         return length
-
-
-a = Caltech('Caltech101')
-
-print(a.db)
-print(a.__len__())
-print(a.__getitem__(2))

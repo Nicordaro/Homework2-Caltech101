@@ -10,6 +10,7 @@ import numpy
 train_idx_dir = 'Caltech101/train.txt'
 test_idx_dir = 'Caltech101/test.txt'
 
+
 def pil_loader(path):
     # open path as file to avoid ResourceWarning (https://github.com/python-pillow/Pillow/issues/835)
     with open(path, 'rb') as f:
@@ -24,32 +25,75 @@ class Caltech(VisionDataset):
         self.split = split  # This defines the split you are going to use
         # (split files are called 'train.txt' and 'test.txt'
 
-        # dataset = self
-        # if split=='train':
-        #     ##read all idxs for the train
-        #     with open(train_idx_dir) as idx:
-        #         data = idx.read().splitlines()
-        #         numpy.random.shuffle(data)
-        #         train = data
-        #         lenght = len(train)
-        #         half = int(lenght / 2)
-        #         self.train_indexes = data[:half]  # split the indices for your train split
-        #         self.val_indexes = data[half:]
 
-        self.categories = sorted(os.listdir(root))
-        self.categories.remove('BACKGROUND_Google')
-        #self.index = []
-        #self.y = []
-        #for(i,c) in enumerate(self.categories):
-        #    self.index.append(i)
-        #    self.y.append(c)
-        self.index = []
-        self.y = []
-        for (i, c) in enumerate(self.categories):
-            n = len(os.listdir(os.path.join(self.root, "101_ObjectCategories", c)))
-            self.index.extend(range(1, n + 1))
-            self.y.extend(n * [i])
-        
+
+        #self.categories = {i: train[i] for i in range(0, len(listOfStr))}
+        self.indexes = []
+
+
+
+        if split=='train':
+            ##read all idxs for the train
+            with open(train_idx_dir) as idx:
+                data = idx.read().splitlines()
+
+                self.imgs = []
+
+
+                #prendo righe con percorsi img
+                for i in data:
+                    #divido in categ e img relativa a categoria
+                    categ = i.split("/")[0]
+                    #scarto bg google
+                    if categ != 'BACKGROUND_Google':
+                        #lista di categorie con duplicati, è ordinata in modo da tenere traccia di categoria
+                        # in base a posizione
+                        self.imgs.append(categ)
+                self.categories = list(numpy.unique(self.imgs))
+
+            for ind, imag in enumerate(self.imgs):
+                    self.indexes.append(ind)
+
+        if split == 'test':
+            ##read all idxs for the train
+            with open(test_idx_dir) as idx:
+                data = idx.read().splitlines()
+
+                self.imgs = []
+
+                # prendo righe con percorsi img
+                for i in data:
+                    # divido in categ e img relativa a categoria
+                    categ = i.split("/")[0]
+                    # scarto bg google
+                    if categ != 'BACKGROUND_Google':
+                        # lista di categorie con duplicati, è ordinata in modo da tenere traccia di categoria
+                        # in base a posizione
+                        self.imgs.append(categ)
+                self.categories = list(numpy.unique(self.imgs))
+
+            for ind, imag in enumerate(self.imgs):
+                self.indexes.append(ind)
+
+
+
+        # self.categories = sorted(os.listdir('Caltech101/'))
+        # #self.categories.remove('BACKGROUND_Google')
+        #
+        # # self.index = []
+        # # self.y = []
+        # # for(i,c) in enumerate(self.categories):
+        # #    self.index.append(i)
+        # #    self.y.append(c)
+        # self.index = []
+        # self.y = []
+        # for (i, c) in enumerate(self.categories):
+        #     print(c)
+        #     n = len(os.listdir('Caltech101/'))
+        #     self.index.extend(range(1, n + 1))
+        #     self.y.extend(n * [i])
+        # print(self.y)
+        # print(self.index)
         '''
         - Here you should implement the logic for reading the splits files and accessing elements
         - If the RAM size allows it, it is faster to store all data in memory
@@ -68,7 +112,11 @@ class Caltech(VisionDataset):
             tuple: (sample, target) where target is class_index of the target class.
         '''
 
-        image, label = pil_loader(index), self.y[index] # Provide a way to access image and label via index
+        def getimg(idx):
+            lab = self.imgs[idx]
+            return lab
+
+        image, label = pil_loader(index), getimg(index)  # Provide a way to access image and label via index
         # Image should be a PIL Image
         # label can be int
 
@@ -85,3 +133,6 @@ class Caltech(VisionDataset):
         '''
         length = len(self.index)
         return length
+
+Caltech('Caltech101').__init__('')
+img, lab = Caltech('Caltech').__getitem__(2)

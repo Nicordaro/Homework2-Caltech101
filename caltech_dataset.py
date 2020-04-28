@@ -34,6 +34,27 @@ class Caltech(VisionDataset):
                     self.categories.append(folder)
                     self.db.append("Caltech101/101_ObjectCategories/" + folder + "/" + img)
         self.categories = numpy.unique(sorted(self.categories)).tolist()
+
+        print(self.db)
+
+        if split =='train':
+            self.train_idx=[]
+            ##read all idxs for the train
+            with open(root + "/train.txt") as idx:
+                data = idx.read().splitlines()
+                for el in data:
+                    if el.split("/")[0]!='BACKGROUND_Google':
+                        self.train_idx.append(self.db.index(root+"/101_ObjectCategories/"+el))
+
+        if split =='test':
+            self.test_idx=[]
+            ##read all idxs for the train
+            with open(root + "/test.txt") as idx:
+                data = idx.read().splitlines()
+                for el in data:
+                    if el.split("/")[0]!='BACKGROUND_Google':
+                        self.test_idx.append(self.db.index(root+"/101_ObjectCategories/"+el))
+
         #print(self.categories)
         '''
         - Here you should implement the logic for reading the splits files and accessing elements

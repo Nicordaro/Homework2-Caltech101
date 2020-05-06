@@ -29,10 +29,10 @@ class Caltech(VisionDataset):
         self.categories = []
 
         for folder in os.listdir(root):
-            for img in os.listdir(root"/" + folder):
+            for img in os.listdir(root+"/" + folder):
                 if folder != 'BACKGROUND_Google':
                     self.categories.append(folder)
-                    self.db.append(root"/" + folder + "/" + img)
+                    self.db.append(root+"/" + folder + "/" + img)
         self.categories = numpy.unique(sorted(self.categories)).tolist()
 
         if split =='train':
